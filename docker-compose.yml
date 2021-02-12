@@ -1,0 +1,7 @@
+version: '3.3'
+
+services:
+  cassandra:
+    image: cassandra:2.2.9
+    ports:
+      - "9042:9042"
