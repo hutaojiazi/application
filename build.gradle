@@ -27,8 +27,14 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.hateoas:spring-hateoas'
 
+	implementation 'org.apache.spark:spark-core_2.12:3.1.0'
+	implementation 'org.apache.spark:spark-sql_2.12:3.1.0'
+	implementation 'com.datastax.spark:spark-cassandra-connector_2.12:3.0.0'
+	implementation 'com.datastax.cassandra:cassandra-driver-mapping:3.10.2'
+
 	implementation 'org.apache.commons:commons-collections4:4.4'
 	implementation 'org.apache.commons:commons-lang3:3.11'
+	implementation 'joda-time:joda-time:2.10.10'
 
 	compileOnly("org.projectlombok:lombok")
 	testCompileOnly("org.projectlombok:lombok")
@@ -37,6 +43,12 @@ dependencies {
 
 	testImplementation("org.junit.vintage:junit-vintage-engine")
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+configurations {
+	all {
+		exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+	}
 }
 
 test {
