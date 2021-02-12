@@ -31,10 +31,10 @@ public class StockController
 		return ResponseEntity.ok().body(overviews);
 	}
 
-	@GetMapping(value = "/api/stocks/{stockId}")
-	public ResponseEntity<StockOverview> getById(@PathVariable final String stockId)
+	@GetMapping(value = "/api/stocks/{symbol}")
+	public ResponseEntity<StockOverview> getById(@PathVariable final String symbol)
 	{
-		final StockQuery query = new StockQuery(stockId, LocalDate.now().minusDays(30));
+		final StockQuery query = StockQuery.builder().symbol(symbol).start(LocalDate.now().minusDays(3)).build();
 		final StockOverview overview = (new SingleStockOverviewJob()).execute(javaSparkContext, query);
 		return ResponseEntity.ok().body(overview);
 	}
