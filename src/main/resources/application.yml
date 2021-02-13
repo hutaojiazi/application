@@ -14,6 +14,17 @@ spring:
     password:
     keyspace: order_demo
     schema-action: CREATE_IF_NOT_EXISTS
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: group1
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      bootstrap-servers: localhost:9092
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 spark:
   master: local[2]

@@ -24,7 +24,7 @@ import java.util.Optional;
 @Configuration
 @EnableConfigurationProperties(CassandraProperties.class)
 @Slf4j
-public class CassandraConfiguration extends AbstractCassandraConfiguration
+public class CassandraConfig extends AbstractCassandraConfiguration
 {
 	@Value("${spring.data.cassandra.contact-points:localhost}")
 	private String contactPoints;
