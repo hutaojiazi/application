@@ -21,17 +21,15 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-cassandra'
-
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.hateoas:spring-hateoas'
 	implementation 'org.springframework.kafka:spring-kafka'
 
 	implementation 'org.apache.spark:spark-core_2.12:3.0.0'
+	implementation 'org.apache.spark:spark-streaming_2.12:3.0.0'
 	implementation 'org.apache.spark:spark-sql_2.12:3.0.0'
 	implementation 'com.datastax.spark:spark-cassandra-connector_2.12:3.0.0'
-	implementation 'com.datastax.cassandra:cassandra-driver-mapping:3.10.2'
 
 	implementation 'org.apache.commons:commons-collections4:4.4'
 	implementation 'org.apache.commons:commons-lang3:3.11'
