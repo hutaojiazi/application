@@ -12,20 +12,23 @@ import org.springframework.context.annotation.Configuration;
 public class SparkContextConfig
 {
 	@Value("${spark.master}")
-	String sparkMasterUrl;
+	private String sparkMasterUrl;
+
+	@Value("${spark.appName}")
+	private String sparkAppName;
 
 	@Value("${spring.data.cassandra.contact-points:localhost}")
 	private String contactPoints;
 
 	@Bean
-	public JavaSparkContext javaSparkContext()
+	public JavaSparkContext sparkContext()
 	{
 		log.info("Connecting to spark with master Url: {}, and cassandra host: {}", sparkMasterUrl, contactPoints);
 
-		SparkConf conf = new SparkConf(true).set("spark.cassandra.connection.host", contactPoints)
+		final SparkConf conf = new SparkConf().set("spark.cassandra.connection.host", contactPoints)
 				.set("spark.submit.deployMode", "client");
 
-		JavaSparkContext context = new JavaSparkContext(sparkMasterUrl, "SparkDemo", conf);
+		final JavaSparkContext context = new JavaSparkContext(sparkMasterUrl, sparkAppName, conf);
 		//context.addJar("/jobs/spark-shared.jar");
 
 		log.debug("SparkContext created");
