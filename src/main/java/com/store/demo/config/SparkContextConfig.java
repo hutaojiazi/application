@@ -20,12 +20,16 @@ public class SparkContextConfig
 	@Value("${spring.data.cassandra.contact-points:localhost}")
 	private String contactPoints;
 
+	@Value("${spring.data.cassandra.port:0000}")
+	private int port;
+
 	@Bean
 	public JavaSparkContext sparkContext()
 	{
 		log.info("Connecting to spark with master Url: {}, and cassandra host: {}", sparkMasterUrl, contactPoints);
 
 		final SparkConf conf = new SparkConf().set("spark.cassandra.connection.host", contactPoints)
+				.set("spark.cassandra.connection.port", String.valueOf(port))
 				.set("spark.submit.deployMode", "client");
 
 		final JavaSparkContext context = new JavaSparkContext(sparkMasterUrl, sparkAppName, conf);

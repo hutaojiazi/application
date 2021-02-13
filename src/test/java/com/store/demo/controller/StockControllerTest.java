@@ -31,7 +31,7 @@ public class StockControllerTest
 //	@Test
 //	public void shouldReturnDefaultMessage() throws Exception
 //	{
-//		final MvcResult result = this.mockMvc.perform(get("/api/stocks")).andDo(print()).andExpect(status().isOk()).andReturn();
+//		final MvcResult result = this.mockMvc.perform(get("/api/companies")).andDo(print()).andExpect(status().isOk()).andReturn();
 //		final List<StockOverview> actual = new ObjectMapper().readValue(result.getResponse().getContentAsString(),
 //				new TypeReference<List<StockOverview>>()
 //				{
