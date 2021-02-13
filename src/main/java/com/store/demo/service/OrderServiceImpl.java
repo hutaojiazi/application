@@ -1,5 +1,6 @@
 package com.store.demo.service;
 
+import com.store.demo.messaging.dto.OrderCreatedMessageDto;
 import com.store.demo.model.Order;
 import com.store.demo.model.OrderPrimaryKey;
 import com.store.demo.repository.OrderRepository;
@@ -66,9 +67,9 @@ public class OrderServiceImpl implements OrderService
 	public String create(final Order order)
 	{
 		final String orderId = orderRepository.save(order).getKey().getOrderId().toString();
-		final String payload = "A new order has been placed. order id: " + orderId;
+		final OrderCreatedMessageDto payload = OrderCreatedMessageDto.builder().orderId(orderId).message("A new order has been placed").build();
 
-		final MessageBuilder<String> messageBuilder = MessageBuilder.withPayload(payload);
+		final MessageBuilder<OrderCreatedMessageDto> messageBuilder = MessageBuilder.withPayload(payload);
 
 		messageBuilder.setHeader(MESSAGE_ID, UUID.randomUUID().toString())
 				.setHeader(KafkaHeaders.TOPIC, KAFKA_TOPIC)

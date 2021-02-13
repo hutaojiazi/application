@@ -1,5 +1,6 @@
 package com.store.demo.messaging;
 
+import com.store.demo.messaging.dto.OrderCreatedMessageDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.Message;
@@ -17,7 +18,7 @@ public class OrderCreatedKafkaListener
 {
 	@Transactional
 	@KafkaListener(topics = KAFKA_TOPIC)
-	public void process(@Payload final Message<String> message, @Header(MESSAGE_ID) final String messageId)
+	public void process(@Payload final Message<OrderCreatedMessageDto> message, @Header(MESSAGE_ID) final String messageId)
 	{
 		log.info("Received kafka message: {}", message);
 	}
