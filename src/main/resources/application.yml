@@ -1,0 +1,22 @@
+spring:
+  profiles.active: dev
+  jackson:
+    default-property-inclusion: non_null
+    date-format: com.fasterxml.jackson.databind.util.ISO8601DateFormat
+    serialization:
+      indent_output: true
+      write_dates_as_timestamps: false
+      fail-on-empty-beans: false
+  data.cassandra:
+    contact-points: 127.0.0.1
+    port: 9042
+    username:
+    password:
+    keyspace: order_demo
+    schema-action: CREATE_IF_NOT_EXISTS
+
+spark:
+  master: local[2]
+  appName: stockApp
+
+server.port: 8099
