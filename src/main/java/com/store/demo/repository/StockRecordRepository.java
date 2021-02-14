@@ -46,13 +46,17 @@ public class StockRecordRepository
 
 	public void save(final List<DailyPrice> records)
 	{
-		javaFunctions(sparkContext.parallelize(records)).writerBuilder(ORDER_DEMO, DAILY_PRICE_RECORD, mapToRow(DailyPrice.class))
-				.saveToCassandra();
-//		final Dataset<DailyPrice> dataset = sparkSession.createDataset(records, Encoders.bean(DailyPrice.class));
-//		dataset.write()
-//				.mode(SaveMode.Overwrite)
-//				.format(FORMAT)
-//				.options(Map.of(KEY_SPACE, ORDER_DEMO, TABLE, DAILY_PRICE_RECORD))
-//				.save();
+//		javaFunctions(sparkContext.parallelize(records)).writerBuilder(ORDER_DEMO, DAILY_PRICE_RECORD, mapToRow(DailyPrice.class))
+//				.saveToCassandra();
+		final Dataset<Row> dataset = sparkSession.createDataset(records, Encoders.bean(DailyPrice.class))
+				.withColumnRenamed("previousValue", "previous_value")
+				.withColumnRenamed("valueChange", "value_change")
+				.withColumnRenamed("percentChange", "percent_change")
+				.withColumnRenamed("shareVolume", "share_volume");
+		dataset.write()
+				.mode(SaveMode.Overwrite)
+				.format(FORMAT)
+				.options(Map.of(KEY_SPACE, ORDER_DEMO, TABLE, DAILY_PRICE_RECORD))
+				.save();
 	}
 }

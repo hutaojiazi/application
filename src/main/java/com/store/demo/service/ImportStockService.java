@@ -61,7 +61,7 @@ public class ImportStockService
 			return DailyPrice.builder()
 					.symbol(tokens[0])
 					.year(cal.get(Calendar.YEAR))
-					.month(cal.get(Calendar.MONTH))
+					.month(cal.get(Calendar.MONTH) + 1)
 					.day(cal.get(Calendar.DAY_OF_MONTH))
 					.value(Double.parseDouble(tokens[2]))
 					.previousValue(Double.parseDouble(tokens[3]))
