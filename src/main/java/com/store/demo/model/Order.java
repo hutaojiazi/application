@@ -11,13 +11,14 @@ import org.springframework.data.cassandra.core.mapping.Table;
 import java.io.Serializable;
 import java.time.Instant;
 
-@Table(value = "orders")
+import static com.store.demo.model.definition.DatabaseDefinition.Table.ORDERS;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(value = ORDERS)
 public class Order implements Serializable
 {
-
 	@PrimaryKey
 	private OrderPrimaryKey key;
 

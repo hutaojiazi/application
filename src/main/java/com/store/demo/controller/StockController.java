@@ -1,10 +1,10 @@
 package com.store.demo.controller;
 
-import com.store.demo.dto.Company;
 import com.store.demo.dto.StockOverview;
 import com.store.demo.dto.StockQuery;
 import com.store.demo.jobs.AllStocksOverviewJob;
 import com.store.demo.jobs.SingleStockOverviewJob;
+import com.store.demo.model.Company;
 import com.store.demo.service.StockRecordService;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.springframework.http.ResponseEntity;

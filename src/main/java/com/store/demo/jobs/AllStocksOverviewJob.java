@@ -1,10 +1,10 @@
 package com.store.demo.jobs;
 
-import com.store.demo.dto.Company;
-import com.store.demo.dto.DailyPriceRecord;
 import com.store.demo.dto.RecordValueContext;
 import com.store.demo.dto.StockOverview;
 import com.store.demo.dto.StockQuery;
+import com.store.demo.model.Company;
+import com.store.demo.model.DailyPrice;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -24,14 +24,14 @@ public class AllStocksOverviewJob
 		final JavaPairRDD<String, Company> companies = javaFunctions(context).cassandraTable(ORDER_DEMO, "company",
 				mapRowTo(Company.class)).mapToPair(company -> new Tuple2<>(company.getSymbol(), company));
 
-		final JavaRDD<DailyPriceRecord> symbolResults = javaFunctions(context).cassandraTable(ORDER_DEMO, "daily_price_record",
-				mapRowTo(DailyPriceRecord.class)).filter(record -> (stockQuery.getStart().compareTo(record.getDate()) > 0)).cache();
+		final JavaRDD<DailyPrice> symbolResults = javaFunctions(context).cassandraTable(ORDER_DEMO, "daily_price_record",
+				mapRowTo(DailyPrice.class)).filter(record -> (stockQuery.getStart().compareTo(record.getDate()) > 0)).cache();
 
-		final JavaPairRDD<String, DailyPriceRecord> keyedRecords = symbolResults.mapToPair(
+		final JavaPairRDD<String, DailyPrice> keyedRecords = symbolResults.mapToPair(
 				record -> new Tuple2<>(record.getSymbol(), record));
 
 		final JavaPairRDD<String, RecordValueContext> values = keyedRecords.join(companies).mapValues(joinedTuple -> {
-			final DailyPriceRecord current = joinedTuple._1();
+			final DailyPrice current = joinedTuple._1();
 			final Company company = joinedTuple._2();
 			return new RecordValueContext(current.getSymbol(), company.getName(), current.getValue(), current.getShareVolume());
 		}).cache();

@@ -1,7 +1,7 @@
 package com.store.demo.service;
 
-import com.store.demo.dto.Company;
-import com.store.demo.dto.DailyPriceRecord;
+import com.store.demo.model.Company;
+import com.store.demo.model.DailyPrice;
 import com.store.demo.repository.StockRecordRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class StockRecordService
 		return recordRepository.getCompanies();
 	}
 
-	public void save(List<DailyPriceRecord> records)
+	public void save(List<DailyPrice> records)
 	{
 		recordRepository.save(records);
 	}

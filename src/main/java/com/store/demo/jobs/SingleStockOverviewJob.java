@@ -1,9 +1,9 @@
 package com.store.demo.jobs;
 
-import com.store.demo.dto.Company;
-import com.store.demo.dto.DailyPriceRecord;
 import com.store.demo.dto.StockOverview;
 import com.store.demo.dto.StockQuery;
+import com.store.demo.model.Company;
+import com.store.demo.model.DailyPrice;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 
@@ -28,13 +28,13 @@ public class SingleStockOverviewJob
 
 		final JavaRDD<Company> companies = javaFunctions(context).cassandraTable(ORDER_DEMO, "company", mapRowTo(Company.class));
 
-		final JavaRDD<DailyPriceRecord> symbolResults = javaFunctions(context).cassandraTable(ORDER_DEMO, "daily_price_record",
-				mapRowTo(DailyPriceRecord.class))
+		final JavaRDD<DailyPrice> symbolResults = javaFunctions(context).cassandraTable(ORDER_DEMO, "daily_price_record",
+				mapRowTo(DailyPrice.class))
 				.where("symbol = ? and year = ?", stockQuery.getSymbol(), stockQuery.getStart().getYear())
 				.filter(record -> (stockQuery.getStart().compareTo(record.getDate()) > 0))
 				.cache();
 
-		final JavaRDD<Double> rawValues = symbolResults.map(DailyPriceRecord::getValue).cache();
+		final JavaRDD<Double> rawValues = symbolResults.map(DailyPrice::getValue).cache();
 		overview.setThirtyDayHigh(rawValues.reduce((c1, c2) -> c1 > c2 ? c1 : c2));
 		overview.setThirtyDayLow(rawValues.reduce((c1, c2) -> c1 < c2 ? c1 : c2));
 

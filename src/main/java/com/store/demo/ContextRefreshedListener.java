@@ -1,6 +1,6 @@
 package com.store.demo;
 
-import com.store.demo.service.RecordIngestionService;
+import com.store.demo.service.ImportStockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -10,17 +10,17 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ContextRefreshedListener implements ApplicationListener<ContextRefreshedEvent>
 {
-	private RecordIngestionService recordIngestionService;
+	private ImportStockService importStockService;
 
-	public ContextRefreshedListener(final RecordIngestionService recordIngestionService)
+	public ContextRefreshedListener(final ImportStockService importStockService)
 	{
-		this.recordIngestionService = recordIngestionService;
+		this.importStockService = importStockService;
 	}
 
 	@Override
 	public void onApplicationEvent(final ContextRefreshedEvent event)
 	{
 		log.info("Time to ingest");
-		recordIngestionService.ingestFromCsv("ticker.csv");
+		importStockService.importFromCsv("ticker.csv");
 	}
 }

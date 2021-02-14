@@ -7,9 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-/**
- * Meant to hold a subset of the information with Company and DailyPriceRecord, used for calculations
- */
 @Data
 @Builder
 @NoArgsConstructor
