@@ -28,7 +28,6 @@ import java.util.Optional;
 @RequestMapping("/api/orders")
 public class OrderController extends AbstractController
 {
-
 	private final OrderService orderService;
 
 	public OrderController(final OrderService orderService)
@@ -37,7 +36,7 @@ public class OrderController extends AbstractController
 	}
 
 	@GetMapping
-	public HttpEntity<SliceCollection<Order>> getBooks(@PageableDefault(size = 20) Pageable pageable)
+	public HttpEntity<SliceCollection<Order>> getOrders(@PageableDefault(size = 20) Pageable pageable)
 	{
 		final Slice<Order> orders = orderService.getAll(pageable);
 		return ResponseEntity.ok(SliceCollection.of(orders));
@@ -55,6 +54,13 @@ public class OrderController extends AbstractController
 	{
 		final List<Order> orders = orderService.getByOrderId(orderId);
 		return ResponseEntity.ok().body(orders);
+	}
+
+	@GetMapping(value = "/streaming")
+	public ResponseEntity<Void> initializeStructuredStreaming()
+	{
+		orderService.initializeStructuredStreaming();
+		return ResponseEntity.ok().build();
 	}
 
 	@DeleteMapping(value = "/{orderId}")

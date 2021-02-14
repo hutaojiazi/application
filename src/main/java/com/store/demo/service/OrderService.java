@@ -49,4 +49,6 @@ public interface OrderService
 	 * @return the id of the order created.
 	 */
 	String create(Order order);
+
+	void initializeStructuredStreaming();
 }
