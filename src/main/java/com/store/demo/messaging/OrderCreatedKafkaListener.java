@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.store.demo.util.Constants.KAFKA_TOPIC;
+import static com.store.demo.util.Constants.KAFKA_TOPIC_PROCESSED;
 import static com.store.demo.util.Constants.MESSAGE_ID;
 
 @Slf4j
@@ -18,6 +19,7 @@ public class OrderCreatedKafkaListener
 {
 	@Transactional
 	@KafkaListener(topics = KAFKA_TOPIC)
+	//@KafkaListener(topics = KAFKA_TOPIC_PROCESSED)
 	public void process(@Payload final Message<OrderCreatedMessageDto> message, @Header(MESSAGE_ID) final String messageId)
 	{
 		log.info("Received kafka message: {}", message);

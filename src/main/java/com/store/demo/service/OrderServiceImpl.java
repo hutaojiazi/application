@@ -118,6 +118,12 @@ public class OrderServiceImpl implements OrderService
 		try
 		{
 			final StreamingQuery query = orders.writeStream().outputMode(OutputMode.Append()).format("console").start();
+//			final StreamingQuery query = orders.writeStream()
+//					.format("kafka")
+//					.option("kafka.bootstrap.servers", bootstrapServers)
+//					.option("topic", Constants.KAFKA_TOPIC_PROCESSED)
+//					.option("checkpointLocation", "/path/checkpointLocation")
+//					.start();
 			query.awaitTermination();
 		}
 		catch (final Exception e)
