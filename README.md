@@ -1,3 +1,5 @@
+Spring Boot - Casssandra - Kafka - Spark SQL & Streaming
+
 ## Gradle
 
 The './gradlew' can be changed for 'gradle' if gradle is installed and available in the PATH.
