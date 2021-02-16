@@ -1,18 +1,17 @@
 package com.store.demo.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.store.demo.messaging.dto.DatasetKafkaMessageDto;
 import com.store.demo.messaging.dto.OrderCreatedMessageDto;
 import com.store.demo.model.Order;
 import com.store.demo.model.OrderPrimaryKey;
 import com.store.demo.repository.OrderRepository;
 import com.store.demo.util.Constants;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.catalyst.encoders.ExpressionEncoder;
 import org.apache.spark.sql.streaming.OutputMode;
-import org.apache.spark.sql.streaming.StreamingQuery;
+import org.apache.spark.sql.streaming.Trigger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -26,6 +25,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static com.store.demo.util.Constants.KAFKA_TOPIC;
 import static com.store.demo.util.Constants.MESSAGE_ID;
@@ -104,27 +104,32 @@ public class OrderServiceImpl implements OrderService
 	@Override
 	public void initializeStructuredStreaming()
 	{
-		// Create DataSet representing the stream of input lines from kafka
-		final Dataset<OrderCreatedMessageDto> orders = sparkSession.readStream()
+		final Dataset<DatasetKafkaMessageDto> orders = sparkSession.readStream()
 				.format("kafka")
 				.option("kafka.bootstrap.servers", bootstrapServers)
 				.option("subscribe", Constants.KAFKA_TOPIC)
+				.option("includeHeaders", "true")
 				.load()
-				.selectExpr("CAST(value AS STRING)")
-				.as(Encoders.STRING())
-				.map((MapFunction<String, OrderCreatedMessageDto>) value -> new ObjectMapper().readValue(value,
-						OrderCreatedMessageDto.class), Encoders.bean(OrderCreatedMessageDto.class));
+				.selectExpr("CAST(topic AS STRING)", "CAST(key AS STRING)", "CAST(value AS STRING)", "CAST(timestamp AS STRING)")
+				.as(ExpressionEncoder.javaBean(DatasetKafkaMessageDto.class));
 
 		try
 		{
-			final StreamingQuery query = orders.writeStream().outputMode(OutputMode.Append()).format("console").start();
-//			final StreamingQuery query = orders.writeStream()
-//					.format("kafka")
-//					.option("kafka.bootstrap.servers", bootstrapServers)
-//					.option("topic", Constants.KAFKA_TOPIC_PROCESSED)
-//					.option("checkpointLocation", "/path/checkpointLocation")
-//					.start();
-			query.awaitTermination();
+			orders.writeStream()
+					.outputMode(OutputMode.Append())
+					.format("console")
+					.trigger(Trigger.ProcessingTime(2, TimeUnit.SECONDS))
+					.option("truncate", "false")
+					.start()
+					.awaitTermination();
+
+			orders.writeStream()
+					.format("kafka")
+					.option("kafka.bootstrap.servers", bootstrapServers)
+					.option("topic", Constants.KAFKA_TOPIC_PROCESSED)
+					.option("checkpointLocation", "/path/checkpointLocation")
+					.start()
+					.awaitTermination();
 		}
 		catch (final Exception e)
 		{
