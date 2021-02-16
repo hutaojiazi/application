@@ -115,13 +115,13 @@ public class OrderServiceImpl implements OrderService
 
 		try
 		{
-			orders.writeStream()
-					.outputMode(OutputMode.Append())
-					.format("console")
-					.trigger(Trigger.ProcessingTime(2, TimeUnit.SECONDS))
-					.option("truncate", "false")
-					.start()
-					.awaitTermination();
+//			orders.writeStream()
+//					.outputMode(OutputMode.Append())
+//					.format("console")
+//					.trigger(Trigger.ProcessingTime(2, TimeUnit.SECONDS))
+//					.option("truncate", "false")
+//					.start()
+//					.awaitTermination();
 
 			orders.writeStream()
 					.format("kafka")
