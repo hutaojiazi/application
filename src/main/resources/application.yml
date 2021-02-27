@@ -34,3 +34,5 @@ spark:
   appName: stockApp
 
 server.port: 8099
+
+springdoc.api-docs.path: /api-docs
