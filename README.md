@@ -54,5 +54,7 @@ remove unused volumes
     docker volume prune
     
 https://github.com/DataStax-Examples/spring-k8s-cassandra-microservices/tree/master/microservice-spring-data
+
 https://github.com/spember/spark-cass-spring-demo
+
 https://github.com/lankydan/spring-data-cassandra
